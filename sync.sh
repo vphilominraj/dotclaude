@@ -37,7 +37,7 @@ RSYNC=$(command -v rsync || { echo "Error: rsync not found"; exit 1; })
 
 # ── Sync global ~/.claude ────────────────────────────────────────────────────
 if [ -d "$HOME/.claude" ]; then
-  $RSYNC -a --delete "$HOME/.claude/" "$BACKUP_REPO/global/"
+  $RSYNC -a --delete --exclude=settings.json --exclude=tasks/ --exclude=todos/ "$HOME/.claude/" "$BACKUP_REPO/global/"
   echo "Synced ~/.claude"
 else
   echo "Warning: ~/.claude not found, skipping global sync."

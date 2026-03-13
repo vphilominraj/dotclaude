@@ -82,8 +82,14 @@ if [ ! -f "$GITIGNORE" ]; then
 
 # User project config — never commit this
 config.local.sh
+sync.log
+
+# Claude settings — contains sensitive data (API keys, tokens)
+global/settings.json
 
 # Claude runtime/cache — not worth backing up
+global/tasks/
+global/todos/
 global/cache/
 global/history.jsonl
 global/projects/
