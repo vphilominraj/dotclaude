@@ -50,11 +50,12 @@ BACKUP_REPO=$(expand_path "$BACKUP_REPO")
 # ── Create backup repo if needed ──────────────────────────────────────────────
 GIT=$(command -v git || { echo "Error: git not found"; exit 1; })
 
-if [ ! -d "$BACKUP_REPO" ]; then
+mkdir -p "$BACKUP_REPO"
+cd "$BACKUP_REPO"
+
+if [ ! -d "$BACKUP_REPO/.git" ]; then
   echo ""
-  echo "Creating backup repo at $BACKUP_REPO..."
-  mkdir -p "$BACKUP_REPO"
-  cd "$BACKUP_REPO"
+  echo "Initialising git repo at $BACKUP_REPO..."
   $GIT init
 
   # Offer to create GitHub repo
@@ -66,11 +67,10 @@ if [ ! -d "$BACKUP_REPO" ]; then
     echo "GitHub repo created: $REPO_NAME ($VISIBILITY)"
   else
     echo "gh CLI not found — skipping GitHub repo creation."
-    echo "You can create the remote manually and run: git remote add origin <url>"
+    echo "You can add the remote manually: git remote add origin <url>"
   fi
 else
-  echo "Backup repo already exists at $BACKUP_REPO"
-  cd "$BACKUP_REPO"
+  echo "Backup repo already initialised at $BACKUP_REPO"
 fi
 
 # ── Create .gitignore in backup repo if missing ───────────────────────────────
