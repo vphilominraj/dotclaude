@@ -76,6 +76,34 @@ Add an entry to `config.local.sh` in your backup repo — nothing else to change
 
 ---
 
+## Teardown
+
+To undo everything `setup.sh` did:
+
+```bash
+bash teardown.sh
+```
+
+`teardown.sh` will:
+1. Remove the hourly cron job
+2. Remove the `claude-sync` alias from your `.zshrc` / `.bashrc`
+3. Print your GitHub remote URL with instructions to delete the repo manually
+4. Optionally delete the local backup repo directory
+
+> **Note:** GitHub repo deletion must be done manually — go to the repo **Settings → Danger Zone → Delete this repository**.
+
+---
+
+## What gets synced (and what doesn't)
+
+| Included | Excluded |
+|---|---|
+| `~/.claude/` (commands, agents, settings structure) | `settings.json` (contains API keys / tokens) |
+| per-project `.claude/` dirs | `tasks/`, `todos/` (runtime state) |
+| | `cache/`, `history.jsonl`, `sync.log` |
+
+---
+
 ## Requirements
 
 - `git`
