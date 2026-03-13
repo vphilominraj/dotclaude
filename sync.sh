@@ -68,7 +68,8 @@ HAS_COMMITS=$($GIT rev-parse --verify HEAD 2>/dev/null && echo "yes" || echo "no
 if [ "$HAS_COMMITS" = "yes" ] && $GIT diff --cached --quiet; then
   echo "Nothing changed, skipping commit."
 else
-  BRANCH=$($GIT rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+  BRANCH=$($GIT rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+  [ -z "$BRANCH" ] || [ "$BRANCH" = "HEAD" ] && BRANCH="main"
   $GIT commit -m "sync $(date '+%Y-%m-%d %H:%M')"
   $GIT push --set-upstream origin "$BRANCH"
   echo "Synced and pushed to $BRANCH."
