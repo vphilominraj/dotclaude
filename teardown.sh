@@ -62,9 +62,11 @@ fi
 
 # ── Remove alias from shell rc ────────────────────────────────────────────────
 if grep -q "claude-sync" "$RC_FILE" 2>/dev/null; then
-  # Remove the alias line, the comment above it, and the blank line before it
-  grep -v "claude-sync" "$RC_FILE" | grep -v "# Claude config backup" > "$RC_FILE.tmp"
-  mv "$RC_FILE.tmp" "$RC_FILE"
+  # Remove the alias line and the comment above it
+  grep -v "claude-sync" "$RC_FILE" > "$RC_FILE.tmp" || true
+  grep -v "# Claude config backup" "$RC_FILE.tmp" > "$RC_FILE.tmp2" || true
+  mv "$RC_FILE.tmp2" "$RC_FILE"
+  rm -f "$RC_FILE.tmp"
   echo "Removed 'claude-sync' alias from $RC_FILE."
 else
   echo "No alias found in $RC_FILE — skipping."
