@@ -62,10 +62,13 @@ done
 cd "$BACKUP_REPO"
 $GIT add -A
 
-if $GIT diff --cached --quiet; then
+# On a brand-new repo there is no HEAD yet — skip the diff check and always commit
+HAS_COMMITS=$($GIT rev-parse --verify HEAD 2>/dev/null && echo "yes" || echo "no")
+
+if [ "$HAS_COMMITS" = "yes" ] && $GIT diff --cached --quiet; then
   echo "Nothing changed, skipping commit."
 else
-  BRANCH=$($GIT rev-parse --abbrev-ref HEAD)
+  BRANCH=$($GIT rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
   $GIT commit -m "sync $(date '+%Y-%m-%d %H:%M')"
   $GIT push --set-upstream origin "$BRANCH"
   echo "Synced and pushed to $BRANCH."
